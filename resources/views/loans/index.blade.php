@@ -2,24 +2,37 @@
 
 @section('content')
 <div class="container">
-    <h1>Loans</h1>
-    <button class="btn btn-primary mb-3" id="addLoanBtn">Add Loan</button>
+    <h1 class="mb-4">Peminjaman Buku</h1>
 
-    <table class="table table-bordered" id="loans-table">
-        <thead>
-            <tr>
-                <th>Book</th>
-                <th>Librarian</th>
-                <th>Member</th>
-                <th>Loan At</th>
-                <th>Returned At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-    </table>
+    <script>
+        window.userRole = '{{ auth()->user()->role }}';
+    </script>
+
+    @if(in_array(auth()->user()->role, ['admin', 'librarian']))
+        <button class="btn btn-primary mb-3" id="addLoanBtn">Tambah Peminjaman</button>
+    @endif
+
+    <div class="table-responsive">
+        <table class="table table-bordered" id="loans-table">
+            <thead class="table-light">
+                <tr>
+                    <th>Buku</th>
+                    <th>Penjaga</th>
+                    <th>Anggota</th>
+                    <th>Dipinjam Pada</th>
+                    <th>Dikembalikan Pada</th>
+                    @if(in_array(auth()->user()->role, ['admin', 'librarian']))
+                        <th>Aksi</th>
+                    @endif
+                </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 
-@include('loans.modal')
+@if(in_array(auth()->user()->role, ['admin', 'librarian']))
+    @include('loans.modal')
+@endif
 @endsection
 
 @push('scripts')

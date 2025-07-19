@@ -2,17 +2,16 @@
 
 @section('content')
 <div class="container">
-    <h1>Categories</h1>
+    <h1>Kategori</h1>
 
-    <button class="btn btn-primary mb-3" id="addCategory">Add Category</button>
+    <button class="btn btn-primary mb-3" id="addCategory">Tambah Kategori</button>
 
     <table class="table table-bordered" id="categories-table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Created At</th>
-                <th>Action</th>
+                <th>Nama</th>
+                <th>Dibuat Pada</th>
+                <th>Aksi</th>
             </tr>
         </thead>
     </table>

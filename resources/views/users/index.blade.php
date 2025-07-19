@@ -2,19 +2,19 @@
 
 @section('content')
 <div class="container">
-    <h1>Users</h1>
+    <h1>Member</h1>
 
-    <button id="addUser" class="btn btn-primary mb-3">Add User</button>
+    <button id="addUser" class="btn btn-primary mb-3">Tambah Member</button>
 
     <table class="table table-bordered" id="users-table">
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Nama</th>
                 <th>Email</th>
-                <th>Phone</th>
-                <th>Address</th>
+                <th>Telepon</th>
+                <th>Alamat</th>
                 <th>Role</th>
-                <th>Action</th>
+                <th>Aksi</th>
             </tr>
         </thead>
     </table>
@@ -28,12 +28,12 @@
         <input type="hidden" name="id" id="id">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">User</h5>
+                <h5 class="modal-title">Member</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label>Name</label>
+                    <label>Nama</label>
                     <input type="text" name="name" class="form-control" required>
                 </div>
                 <div class="mb-3">
@@ -41,26 +41,27 @@
                     <input type="email" name="email" class="form-control" required>
                 </div>
                 <div class="mb-3">
-                    <label>Phone</label>
+                    <label>Telepon</label>
                     <input type="text" name="phone" class="form-control">
                 </div>
                 <div class="mb-3">
-                    <label>Address</label>
+                    <label>Alamat</label>
                     <input type="text" name="address" class="form-control">
                 </div>
+                @if(auth()->user()->role === 'admin')
                 <div class="mb-3">
                     <label>Role</label>
-                    <select name="role" class="form-control" required>
-                        <option value="">Select</option>
-                        <option value="librarian">Librarian</option>
+                    <select name="role" class="form-control">
                         <option value="member">Member</option>
+                        <option value="librarian">Librarian</option>
                         <option value="admin">Admin</option>
                     </select>
                 </div>
+                @endif
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </form>
@@ -69,8 +70,6 @@
 @endsection
 
 @push('scripts')
-<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
 $(function () {
     let table = $('#users-table').DataTable({
@@ -114,13 +113,13 @@ $(function () {
             $('[name=email]').val(data.email);
             $('[name=phone]').val(data.phone);
             $('[name=address]').val(data.address);
-            $('[name=role]').val(data.role);
+            if(data.role) $('[name=role]').val(data.role);
             $('#userModal').modal('show');
         });
     });
 
     $('#users-table').on('click', '.delete', function(){
-        if(confirm('Are you sure?')) {
+        if(confirm('Yakin ingin menghapus user ini?')) {
             let id = $(this).data('id');
             $.ajax({
                 url: "{{ url('users') }}/" + id,

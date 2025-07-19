@@ -1,3 +1,4 @@
+@if(auth()->user()->role !== 'member')
 <div class="modal fade" id="bookModal" tabindex="-1">
     <div class="modal-dialog">
         @csrf
@@ -13,11 +14,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label>Title</label>
+                        <label>Judul</label>
                         <input type="text" name="title" id="title" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label>Authors</label>
+                        <label>Penulis</label>
                         <input type="text" name="authors" id="authors" class="form-control">
                     </div>
                     <div class="mb-3">
@@ -25,7 +26,7 @@
                         <input type="text" name="isbn" id="isbn" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label>Categories</label>
+                        <label>Kategori</label>
                         <select name="categories[]" id="categories" class="form-select categories-select" multiple>
                             @foreach(\App\Models\Category::all() as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -33,15 +34,16 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label>Description</label>
+                        <label>Deskripsi</label>
                         <textarea name="description" id="description" class="form-control"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+@endif

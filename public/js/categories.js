@@ -10,7 +10,7 @@ $(document).ready(function () {
         serverSide: true,
         ajax: '/categories/list',
         columns: [
-            { data: 'id', name: 'id' },
+            
             { data: 'name', name: 'name' },
             { data: 'created_at', name: 'created_at' },
             { data: 'action', name: 'action', orderable: false, searchable: false },

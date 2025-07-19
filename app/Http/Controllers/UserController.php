@@ -15,13 +15,19 @@ class UserController extends Controller
 
     public function data()
     {
-        $users = User::query();
+        $authUser = auth()->user();
+
+        if ($authUser->role === 'admin') {
+            $users = User::query(); // admin bisa lihat semua
+        } else {
+            $users = User::where('role', 'member'); // librarian hanya member
+        }
 
         return DataTables::of($users)
-            ->addColumn('action', function($user){
+            ->addColumn('action', function ($user) {
                 return '
-                    <button class="btn btn-primary btn-sm edit" data-id="'.$user->id.'">Edit</button>
-                    <button class="btn btn-danger btn-sm delete" data-id="'.$user->id.'">Delete</button>
+                    <button class="btn btn-primary btn-sm edit" data-id="' . $user->id . '">Edit</button>
+                    <button class="btn btn-danger btn-sm delete" data-id="' . $user->id . '">Delete</button>
                 ';
             })
             ->rawColumns(['action'])
@@ -30,15 +36,21 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $authUser = auth()->user();
+
         $validated = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $request->id,
             'phone' => 'nullable',
             'address' => 'nullable',
-            'role' => 'required|in:librarian,member,admin',
+            'role' => 'nullable|in:librarian,member,admin',
         ]);
 
-        $user = User::updateOrCreate(
+        if ($authUser->role !== 'admin') {
+            $validated['role'] = 'member';
+        }
+
+        User::updateOrCreate(
             ['id' => $request->id],
             $validated
         );
@@ -48,11 +60,19 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        if (auth()->user()->role !== 'admin' && $user->role !== 'member') {
+            abort(403, 'Hanya bisa edit member');
+        }
+
         return response()->json($user);
     }
 
     public function destroy(User $user)
     {
+        if (auth()->user()->role !== 'admin' && $user->role !== 'member') {
+            abort(403, 'Hanya bisa hapus member');
+        }
+
         $user->delete();
 
         return response()->json(['success' => true, 'message' => 'User deleted']);
