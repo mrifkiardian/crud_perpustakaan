@@ -7,22 +7,12 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\LoanController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Ini adalah routes aplikasi perpustakaan Anda.
-| Sudah mendukung Auth (Breeze) + Middleware Role.
-|
-*/
-
 // Halaman depan
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Dashboard setelah login (disiapkan oleh Breeze)
+// Dashboard setelah login -> breeze
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
@@ -30,11 +20,6 @@ Route::get('/dashboard', function () {
 // Routes auth Breeze
 require __DIR__.'/auth.php';
 
-/*
-|--------------------------------------------------------------------------
-| Routes CRUD sesuai Role
-|--------------------------------------------------------------------------
-*/
 
 // CRUD Users → hanya admin
 Route::middleware(['auth', 'role:admin,librarian'])->group(function () {
